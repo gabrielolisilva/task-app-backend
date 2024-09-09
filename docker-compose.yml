@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: todo-user
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: todo-db
+    ports:
+      - '5433:5432'
