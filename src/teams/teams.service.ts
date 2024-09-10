@@ -22,6 +22,10 @@ export class TeamsService {
         where: {
           id,
         },
+        include: {
+          User: true,
+          Project: true,
+        },
       });
 
       if (!teamDB) {
