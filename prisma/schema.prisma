@@ -12,3 +12,53 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  User User[]
+  Project Project[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  email     String   @unique
+  password  String
+  team      Team?    @relation(fields: [team_id], references: [id])
+  team_id   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Task Task[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  team        Team     @relation(fields: [team_id], references: [id])
+  team_id     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Task Task[]
+}
+
+model Task {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  expiration_date DateTime
+  owner           User     @relation(fields: [owner_id], references: [id])
+  owner_id        String
+  project         Project  @relation(fields: [project_id], references: [id])
+  project_id      String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
