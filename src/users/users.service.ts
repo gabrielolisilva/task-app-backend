@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { IUsersData } from './interface/users.interface';
 import { ErrorMessage } from 'src/utils/errorMessage';
 import { IUserDTO } from './dto/userDTO';
+import { hashPassword } from 'src/utils/helpers';
 
 @Injectable()
 export class UsersService {
@@ -37,8 +38,23 @@ export class UsersService {
     }
   }
 
+  async findByEmail(email: string): Promise<IUsersData | null> {
+    try {
+      return this.prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async create(data: IUserDTO): Promise<IUsersData> {
     try {
+      const hashedPassword = await hashPassword(data.password);
+      data.password = hashedPassword;
+
       return this.prisma.user.create({ data });
     } catch (error) {
       throw new InternalServerErrorException(error.message);

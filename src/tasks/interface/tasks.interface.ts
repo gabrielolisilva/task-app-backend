@@ -1,4 +1,5 @@
 export interface ITaskData {
+  id: string;
   title: string;
   description: string;
   expiration_date: Date;
