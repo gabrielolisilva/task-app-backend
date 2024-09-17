@@ -30,7 +30,12 @@ export class AuthService {
     }
 
     const token = this.jwtService.sign(
-      { id: userDB.id },
+      {
+        id: userDB.id,
+        name: userDB.name,
+        email: userDB.email,
+        teamId: userDB.team_id,
+      },
       { secret: process.env.JWT_SECRET, expiresIn: '60m' },
     );
 
