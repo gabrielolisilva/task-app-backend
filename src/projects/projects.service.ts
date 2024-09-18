@@ -37,6 +37,18 @@ export class ProjectsService {
     }
   }
 
+  async findByTeams(teamId: string): Promise<IProjectData[]> {
+    try {
+      return this.prisma.project.findMany({
+        where: {
+          team_id: teamId,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async create(data: ProjectDTO): Promise<IProjectData> {
     try {
       return this.prisma.project.create({ data });

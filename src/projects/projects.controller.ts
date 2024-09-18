@@ -28,6 +28,11 @@ export class ProjectsController {
     return this.projectService.findById(id);
   }
 
+  @Get('team/:teamId')
+  findByTeams(@Param('teamId') teamId: string): Promise<IProjectData[]> {
+    return this.projectService.findByTeams(teamId);
+  }
+
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() teamDTO: ProjectDTO): Promise<IProjectData> {

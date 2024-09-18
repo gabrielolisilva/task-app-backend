@@ -46,4 +46,11 @@ export class UsersController {
   delete(@Param('id') id: string): Promise<IUsersData | ErrorMessage> {
     return this.userService.delete(id);
   }
+
+  @Post('join/team')
+  joinTeam(
+    @Body() data: { user_id: string; team_id: string },
+  ): Promise<IUsersData | ErrorMessage> {
+    return this.userService.joinTeam(data);
+  }
 }

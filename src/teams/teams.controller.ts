@@ -13,10 +13,15 @@ import { TeamsService } from './teams.service';
 import { ITeamData } from './interface/teams.interface';
 import { ITeamDTO } from './dto/teamDTO';
 import { ErrorMessage } from 'src/utils/errorMessage';
+import { IUsersData } from 'src/users/interface/users.interface';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('teams')
 export class TeamsController {
-  constructor(private teamService: TeamsService) {}
+  constructor(
+    private readonly teamService: TeamsService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Get()
   findAll(): Promise<ITeamData[]> {
@@ -26,6 +31,13 @@ export class TeamsController {
   @Get(':id')
   findById(@Param('id') id: string): Promise<ITeamData | ErrorMessage> {
     return this.teamService.findById(id);
+  }
+
+  @Get('users/:team_id')
+  findByTeamId(
+    @Param('team_id') team_id: string,
+  ): Promise<IUsersData[] | ErrorMessage> {
+    return this.userService.getUserByTeamId(team_id);
   }
 
   @Post()

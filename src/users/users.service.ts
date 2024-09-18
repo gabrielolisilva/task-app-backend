@@ -29,7 +29,7 @@ export class UsersService {
       });
 
       if (!userDB) {
-        return new ErrorMessage('User not founded', 'US28');
+        return new ErrorMessage('User not founded', 'US32');
       }
 
       return userDB;
@@ -70,7 +70,7 @@ export class UsersService {
       });
 
       if (!userDB) {
-        return new ErrorMessage('User not founded', 'US36');
+        return new ErrorMessage('User not founded', 'US73');
       }
 
       const updatedUser = this.prisma.user.update({
@@ -101,7 +101,7 @@ export class UsersService {
       });
 
       if (!userDB) {
-        return new ErrorMessage('user not founded', 'US36');
+        return new ErrorMessage('user not founded', 'US104');
       }
 
       await this.prisma.user.delete({
@@ -111,6 +111,44 @@ export class UsersService {
       });
 
       return userDB;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async joinTeam(data: {
+    user_id: string;
+    team_id: string;
+  }): Promise<IUsersData | ErrorMessage> {
+    const userDB = this.prisma.user.findFirst({
+      where: {
+        id: data.user_id,
+      },
+    });
+
+    if (!userDB) {
+      return new ErrorMessage('User not founded', 'US127');
+    }
+
+    const updatedUser = this.prisma.user.update({
+      where: {
+        id: data.user_id,
+      },
+      data: {
+        team_id: data.team_id,
+      },
+    });
+
+    return updatedUser;
+  }
+
+  async getUserByTeamId(team_id: string): Promise<IUsersData[]> {
+    try {
+      return this.prisma.user.findMany({
+        where: {
+          team_id,
+        },
+      });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
